@@ -1,0 +1,72 @@
+<!--
+    p/ executar montar o local host no CMD com o comando Python
+    -navegar até o diretório onde estão os arquivos
+    -py -m http.server
+    
+    obs: Ctrl+C interrompe o serv.
+-->
+<html>
+<head>
+    <meta charset="UTF-8">
+<script>
+    var max;
+    var current = 5;
+    loadDoc();
+
+    function loadDoc(){
+        console.log("It actually works!");
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function(){            
+            if(this.readyState == 4 &&  this.status == 200){ //resposta pronta
+                lerXML(xhttp, current);
+            }
+        }
+
+        xhttp.open("GET", "file2.xml", true);
+        xhttp.send();
+    }
+
+    function lerXML(xml, indice){
+        var cdList = xml.responseXML.getElementsByTagName("CD");
+        max = cdList.length - 1;
+        var artist = document.getElementById('artist');
+        var title = document.getElementById('title');
+        var year = document.getElementById('year');
+        artist.innerHTML = "Artista: " + cdList[indice].getElementsByTagName("ARTIST")[0].innerHTML;
+        title.innerHTML = "Titulo: " + cdList[indice].getElementsByTagName("TITLE")[0].innerHTML;
+        year.innerHTML = "Ano: " + cdList[indice].getElementsByTagName("YEAR")[0].innerHTML;        
+    }
+
+    function Anterior(){
+        if(current > 0){
+            current --;
+            loadDoc();            
+        }
+    }
+
+    function Proximo(){
+        if(current < max){
+            current ++;
+            loadDoc();
+        }
+    }
+</script>
+</head>
+
+<body style="font-size: 22px">    
+    <h3 style="display: block; width: fit-content; margin: auto">Navegação em arquivo XML com AJAX</h3><br/>
+    <div id='content' style="display: block; width: fit-content; margin: auto">        
+        <div id='artist'></div>
+        <div id='title'></div>
+        <div id='year'></div>
+
+    </div>
+    <div style="margin: auto; display: block; width: fit-content">
+        <button onclick="Anterior()">PREVIOUS</button>
+        <button onclick="Proximo()">NEXT</button>
+    </div>
+    
+</body>
+
+</html>
